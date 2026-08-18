@@ -1,0 +1,16 @@
+MongoDB connected: 127.0.0.1/attendance_system
+Server running on http://localhost:5000
+[REQ] GET /api/health origin=- ref=-
+[REQ] GET /api/health origin=- ref=-
+[REQ] POST /api/auth/login origin=- ref=-
+[REQ] GET /api/reports/summary origin=- ref=-
+[REQ] GET /api/classes origin=- ref=-
+[REQ] GET /api/attendance/daily?classId=6a7b40d4922cb2b67dd992fc&section=A&date=2026-08-14 origin=- ref=-
+[REQ] GET /dashboard.html origin=- ref=-
+[REQ] GET /api/classes origin=null ref=-
+[REQ] GET /api/classes origin=null ref=-
+[REQ] GET /api/reports/student-wise?classId=6a7b4c8adddaa47f5a86a592&section=B origin=null ref=-
+[REQ] GET /api/reports/student-wise?classId=6a7b4c8adddaa47f5a86a592&section=B origin=null ref=-
+[REQ] GET /api/classes origin=null ref=-
+[REQ] GET /api/attendance/today?classId=6a7b4c8adddaa47f5a86a592&section=B origin=null ref=-
+[REQ] GET /api/students?classId=6a7b4c8adddaa47f5a86a592&section=B&limit=300 origin=null ref=-
