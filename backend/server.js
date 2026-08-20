@@ -6,13 +6,20 @@ const connectDB = require("./config/db");
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: process.env.NODE_ENV === "production"
+    ? (process.env.ALLOWED_ORIGIN || true)
+    : true,
+  credentials: true,
+}));
 app.use(express.json({ limit: "2mb" }));
 
 app.use((req, res, next) => {
   console.log(`[REQ] ${req.method} ${req.originalUrl} origin=${req.headers.origin || "-"} ref=${req.headers.referer || "-"}`);
   next();
 });
+
+app.get("/api/health", (req, res) => res.json({ status: "ok", timestamp: Date.now() }));
 
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/classes", require("./routes/classes"));

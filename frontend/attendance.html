@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ClassPulse | Mark Attendance</title>
-  <link rel="stylesheet" href="./css/style.css?v=2" />
+  <link rel="stylesheet" href="./css/style.css?v=4" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✅</text></svg>" />
 </head>
 <body>
@@ -33,7 +33,13 @@
           <h1 class="page-title" style="margin:0">Mark Attendance</h1>
           <div class="group-badge" id="group-badge" style="margin-top:10px;display:none">—</div>
         </div>
-        <div class="att-date" id="att-date">—</div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="att-date" id="att-date">—</div>
+          <div class="mode-toggle" id="mode-toggle" style="display:none">
+            <button class="mode-btn active" id="mode-seq">Sequential</button>
+            <button class="mode-btn" id="mode-rnd">Random</button>
+          </div>
+        </div>
       </div>
 
       <div id="empty-view" style="display:none">
@@ -74,6 +80,27 @@
           </div>
         </div>
 
+        <div id="random-view" style="display:none">
+          <div class="card" style="margin-bottom:16px">
+            <h2 style="font-size:17px;margin-bottom:12px">🎲 Random Attendance</h2>
+            <p style="color:var(--text-muted);font-size:13.5px;margin-bottom:16px">
+              Type the roll numbers of students who are <strong>Present</strong>. All unmarked roll numbers will be marked <strong>Absent</strong>.
+            </p>
+            <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px">
+              <input type="number" class="input" id="rnd-input" placeholder="Enter roll number..." min="1" style="flex:1;font-size:18px;padding:14px;font-weight:700" />
+              <button class="btn btn-primary" id="rnd-add-btn" style="padding:14px 22px;font-size:16px;font-weight:700">Add ✔</button>
+            </div>
+            <div class="rnd-present-list" id="rnd-present-list"></div>
+            <div class="rnd-stats" id="rnd-stats"></div>
+          </div>
+
+          <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:16px">
+            <button class="btn btn-primary" id="rnd-submit-btn" style="padding:14px 28px;font-size:16px;font-weight:700" disabled>💾 Save Attendance</button>
+            <button class="btn btn-outline" id="rnd-clear-btn">🗑 Clear All</button>
+            <button class="btn btn-outline" id="rnd-undo-btn">↩ Undo</button>
+          </div>
+        </div>
+
         <div id="done-view" class="card" style="display:none">
           <div class="att-summary">
             <div class="done-ico">🎉</div>
@@ -96,9 +123,9 @@
     </main>
   </div>
 
-  <script src="./js/api.js?v=2"></script>
-  <script src="./js/classbar.js?v=2"></script>
-  <script src="./js/attendance.js?v=2"></script>
+  <script src="./js/api.js?v=4"></script>
+  <script src="./js/classbar.js?v=4"></script>
+  <script src="./js/attendance.js?v=4"></script>
   <script src="./js/footer.js?v=2"></script>
 </body>
 </html>
