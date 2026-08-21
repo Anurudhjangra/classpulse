@@ -2,8 +2,8 @@ services:
   - type: web
     name: classpulse
     runtime: node
-    buildCommand: cd backend && npm install
-    startCommand: node backend/server.js
+    buildCommand: cd classpulse/backend && npm install
+    startCommand: node classpulse/backend/server.js
     envVars:
       - key: MONGODB_URI
         sync: false
