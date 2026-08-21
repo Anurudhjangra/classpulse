@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClassPulse | Mark Attendance</title>
+  <link rel="stylesheet" href="./style.css?v=4" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✅</text></svg>" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand"><div class="logo">✅</div><span>ClassPulse</span></div>
+      <nav>
+        <a href="./dashboard.html"><span class="ico">📊</span><span class="lbl">Dashboard</span></a>
+        <a href="./attendance.html" class="active"><span class="ico">✏️</span><span class="lbl">Mark Attendance</span></a>
+        <a href="./report.html"><span class="ico">📈</span><span class="lbl">Reports</span></a>
+        <a href="./students.html"><span class="ico">👥</span><span class="lbl">Students</span></a>
+        <a href="./classes.html"><span class="ico">🏫</span><span class="lbl">Classes</span></a>
+      </nav>
+      <div class="user-box">
+        <div class="who" id="user-name">—</div>
+        <div class="mail" id="user-mail">—</div>
+        <a href="#" class="btn btn-danger-ghost" style="width:100%;justify-content:flex-start;padding:9px 8px;font-size:13.5px;" id="logout-btn">↩ Logout</a>
+      </div>
+    </aside>
+
+    <main class="main att-page">
+      <div id="class-bar"></div>
+
+      <div class="att-top">
+        <div>
+          <h1 class="page-title" style="margin:0">Mark Attendance</h1>
+          <div class="group-badge" id="group-badge" style="margin-top:10px;display:none">—</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="att-date" id="att-date">—</div>
+          <div class="mode-toggle" id="mode-toggle" style="display:none">
+            <button class="mode-btn active" id="mode-seq">Sequential</button>
+            <button class="mode-btn" id="mode-rnd">Random</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="empty-view" style="display:none">
+        <div class="card"><div class="empty"><div class="ico">📭</div>Select a class and section to start marking attendance.</div></div>
+      </div>
+
+      <div id="att-work">
+        <div class="progress-box">
+          <div class="progress-meta">
+            <span id="progress-text">Marking…</span>
+            <span id="progress-count">0 / 0</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+        </div>
+
+        <div id="marking-view">
+          <div class="roll-card" id="roll-card">
+            <div class="roll-label">Current Roll Number</div>
+            <div class="roll-number" id="roll-number">–</div>
+            <div class="roll-name" id="roll-name">&nbsp;</div>
+            <div class="roll-of" id="roll-of">—</div>
+          </div>
+
+          <div class="att-buttons">
+            <button class="btn-big present" id="present-btn">
+              <span class="em">✔</span> Present
+              <span class="key">Press P</span>
+            </button>
+            <button class="btn-big absent" id="absent-btn">
+              <span class="em">✖</span> Absent
+              <span class="key">Press A</span>
+            </button>
+          </div>
+
+          <div class="att-tools no-print">
+            <button class="btn btn-outline" id="undo-btn">↩ Undo <span style="opacity:.6">(U)</span></button>
+            <a href="./report.html" class="btn btn-outline">📈 View Report</a>
+          </div>
+        </div>
+
+        <div id="random-view" style="display:none">
+          <div class="card" style="margin-bottom:16px">
+            <h2 style="font-size:17px;margin-bottom:12px">🎲 Random Attendance</h2>
+            <p style="color:var(--text-muted);font-size:13.5px;margin-bottom:16px">
+              Type the roll numbers of students who are <strong>Present</strong>. All unmarked roll numbers will be marked <strong>Absent</strong>.
+            </p>
+            <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px">
+              <input type="number" class="input" id="rnd-input" placeholder="Enter roll number..." min="1" style="flex:1;font-size:18px;padding:14px;font-weight:700" />
+              <button class="btn btn-primary" id="rnd-add-btn" style="padding:14px 22px;font-size:16px;font-weight:700">Add ✔</button>
+            </div>
+            <div class="rnd-present-list" id="rnd-present-list"></div>
+            <div class="rnd-stats" id="rnd-stats"></div>
+          </div>
+
+          <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:16px">
+            <button class="btn btn-primary" id="rnd-submit-btn" style="padding:14px 28px;font-size:16px;font-weight:700" disabled>💾 Save Attendance</button>
+            <button class="btn btn-outline" id="rnd-clear-btn">🗑 Clear All</button>
+            <button class="btn btn-outline" id="rnd-undo-btn">↩ Undo</button>
+          </div>
+        </div>
+
+        <div id="done-view" class="card" style="display:none">
+          <div class="att-summary">
+            <div class="done-ico">🎉</div>
+            <h2>Attendance Complete!</h2>
+            <p id="done-text">All students have been marked.</p>
+            <div class="chip-row" id="done-chips"></div>
+            <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+              <a href="./report.html" class="btn btn-primary">📈 View Today's Report</a>
+              <a href="./dashboard.html" class="btn btn-outline">📊 Dashboard</a>
+              <button class="btn btn-outline" id="undo-last-btn">↩ Undo Last</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:20px">
+          <div class="section-head"><h2>Today's Status</h2><span style="font-size:13px;color:var(--text-muted)" id="chip-summary">—</span></div>
+          <div class="chip-row" id="chip-row"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="./api.js?v=4"></script>
+  <script src="./classbar.js?v=4"></script>
+  <script src="./attendance.js?v=4"></script>
+  <script src="./footer.js?v=2"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClassPulse | Students</title>
+  <link rel="stylesheet" href="./style.css?v=2" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✅</text></svg>" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand"><div class="logo">✅</div><span>ClassPulse</span></div>
+      <nav>
+        <a href="./dashboard.html"><span class="ico">📊</span><span class="lbl">Dashboard</span></a>
+        <a href="./attendance.html"><span class="ico">✏️</span><span class="lbl">Mark Attendance</span></a>
+        <a href="./report.html"><span class="ico">📈</span><span class="lbl">Reports</span></a>
+        <a href="./students.html" class="active"><span class="ico">👥</span><span class="lbl">Students</span></a>
+        <a href="./classes.html"><span class="ico">🏫</span><span class="lbl">Classes</span></a>
+      </nav>
+      <div class="user-box">
+        <div class="who" id="user-name">—</div>
+        <div class="mail" id="user-mail">—</div>
+        <a href="#" class="btn btn-danger-ghost" style="width:100%;justify-content:flex-start;padding:9px 8px;font-size:13.5px;" id="logout-btn">↩ Logout</a>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div id="class-bar"></div>
+
+      <h1 class="page-title">Students</h1>
+      <p class="page-sub" id="stu-sub">Roster — roll numbers are auto-generated in sequence</p>
+
+      <div class="card" style="margin-bottom:22px">
+        <div class="filters" style="margin:0">
+          <div class="field" style="flex:1;min-width:200px">
+            <label>Search by roll number or name</label>
+            <input type="text" class="input" id="search" placeholder="e.g. 42 or student name…" />
+          </div>
+          <div style="font-size:13px;color:var(--text-muted);align-self:center" id="count-info"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table class="table student-table">
+            <thead>
+              <tr><th>Roll</th><th>Name</th><th style="width:120px"></th></tr>
+            </thead>
+            <tbody id="student-body">
+              <tr><td colspan="3"><div class="skeleton" style="height:24px"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="./api.js?v=2"></script>
+  <script src="./classbar.js?v=2"></script>
+  <script src="./students.js?v=2"></script>
+  <script src="./footer.js?v=2"></script>
+</body>
+</html>

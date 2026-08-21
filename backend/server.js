@@ -27,9 +27,19 @@ app.use("/api/students", require("./routes/students"));
 app.use("/api/attendance", require("./routes/attendance"));
 app.use("/api/reports", require("./routes/reports"));
 
-const frontendDir = path.join(__dirname, "..", "frontend");
+const rootDir = path.join(__dirname, "..");
+
+const BLOCKED = /^\/(backend|node_modules|\.git)(\/|$)|^\/(\.env|\.env\..*|\.gitignore|README\.md|render\.yaml|start\.bat|start-online\.bat|server\.(err|out)\.log)$/i;
+app.use((req, res, next) => {
+  if (BLOCKED.test(req.path)) {
+    return res.status(404).json({ message: "Not found" });
+  }
+  next();
+});
+
 app.use(
-  express.static(frontendDir, {
+  express.static(rootDir, {
+    index: "index.html",
     setHeaders: (res, filePath) => {
       if (/\.(html|js|css)$/.test(filePath)) {
         res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
@@ -40,7 +50,7 @@ app.use(
   })
 );
 
-app.get("/", (req, res) => res.sendFile(path.join(frontendDir, "index.html")));
+app.get("/", (req, res) => res.sendFile(path.join(rootDir, "index.html")));
 
 app.use("/api", (req, res) =>
   res.status(404).json({ message: "API route not found" })

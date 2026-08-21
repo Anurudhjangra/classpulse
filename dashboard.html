@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClassPulse | Dashboard</title>
+  <link rel="stylesheet" href="./style.css?v=3" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✅</text></svg>" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand"><div class="logo">✅</div><span>ClassPulse</span></div>
+      <nav>
+        <a href="./dashboard.html" class="active"><span class="ico">📊</span><span class="lbl">Dashboard</span></a>
+        <a href="./attendance.html"><span class="ico">✏️</span><span class="lbl">Mark Attendance</span></a>
+        <a href="./report.html"><span class="ico">📈</span><span class="lbl">Reports</span></a>
+        <a href="./students.html"><span class="ico">👥</span><span class="lbl">Students</span></a>
+        <a href="./classes.html"><span class="ico">🏫</span><span class="lbl">Classes</span></a>
+      </nav>
+      <div class="user-box">
+        <div class="who" id="user-name">—</div>
+        <div class="mail" id="user-mail">—</div>
+        <a href="#" class="btn btn-danger-ghost" style="width:100%;justify-content:flex-start;padding:9px 8px;font-size:13.5px;" id="logout-btn">↩ Logout</a>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div id="class-bar"></div>
+
+      <h1 class="page-title">Dashboard</h1>
+      <p class="page-sub" id="today-label">Overview of your classes</p>
+
+      <div class="stats-grid">
+        <div class="stat-card tint-1"><div class="stat-ico">👥</div><div class="stat-label">Total Students</div><div class="stat-value" id="s-students">—</div><div class="stat-foot">across all sections</div></div>
+        <div class="stat-card tint-2"><div class="stat-ico">✅</div><div class="stat-label">Today's Present</div><div class="stat-value" id="s-present">—</div><div class="stat-foot" id="s-present-foot">Marked today</div></div>
+        <div class="stat-card tint-3"><div class="stat-ico">❌</div><div class="stat-label">Today's Absent</div><div class="stat-value" id="s-absent">—</div><div class="stat-foot" id="s-absent-foot">—</div></div>
+        <div class="stat-card tint-5"><div class="stat-ico">📊</div><div class="stat-label">Attendance %</div><div class="stat-value" id="s-overall">—</div><div class="stat-foot" id="s-overall-foot">across all records</div></div>
+      </div>
+
+      <div class="card" style="margin-bottom:24px">
+        <div class="section-head">
+          <h2>🔍 Student Check</h2>
+          <span style="font-size:13px;color:var(--text-muted)" id="sc-class">Select a class</span>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <input type="number" class="input" id="sc-roll" placeholder="Roll number (e.g. 42)" min="1" style="max-width:200px" />
+          <button class="btn btn-primary" id="sc-go">Check</button>
+          <span style="font-size:12.5px;color:var(--text-muted)">Check total Present / Absent / % for any student instantly.</span>
+        </div>
+        <div id="sc-result" style="margin-top:14px"></div>
+      </div>
+
+      <div class="card" style="margin-bottom:24px">
+        <div class="section-head">
+          <h2>⚠️ Low Attendance</h2>
+          <a href="./report.html" class="btn btn-outline" style="padding:9px 14px;font-size:13.5px;">📈 Full Report</a>
+        </div>
+        <div id="low-list" style="font-size:13.5px"></div>
+      </div>
+
+      <div class="card" id="my-classes-card" style="margin-bottom:24px">
+        <div class="section-head">
+          <h2>My Classes — Today</h2>
+          <a href="./classes.html" class="btn btn-outline" style="padding:9px 14px;font-size:13.5px;">🏫 Manage Classes</a>
+        </div>
+        <div id="my-classes" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px">
+          <div class="skeleton" style="height:60px"></div>
+        </div>
+      </div>
+
+      <div class="card recent-card">
+        <div class="section-head">
+          <h2>Recent Classes</h2>
+          <a href="./attendance.html" class="btn btn-primary" style="padding:9px 14px;font-size:13.5px;">✏️ Mark Today</a>
+        </div>
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+              <tr><th>Date</th><th>Present</th><th>Absent</th><th>Rate</th><th style="width:32%">Trend</th></tr>
+            </thead>
+            <tbody id="recent-body">
+              <tr><td colspan="5"><div class="skeleton" style="height:24px"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="./api.js?v=2"></script>
+  <script src="./classbar.js?v=2"></script>
+  <script src="./dashboard.js?v=3"></script>
+  <script src="./footer.js?v=2"></script>
+</body>
+</html>
