@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: classpulse
+    runtime: node
+    buildCommand: cd classpulse/backend && npm install
+    startCommand: node classpulse/backend/server.js
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: NODE_ENV
+        value: production
