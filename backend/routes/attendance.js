@@ -4,13 +4,14 @@ const Class = require("../models/Class");
 const auth = require("../middleware/auth");
 const { MAX_ROLL } = require("../config/constants");
 const { todayStr, validateDateStr } = require("../utils/date");
+const { isDupError } = require("../config/db");
 
 const router = express.Router();
 
 router.use(auth);
 
 function validId(id) {
-  return /^[0-9a-fA-F]{24}$/.test(String(id || ""));
+  return /^\d+$/.test(String(id || "")) && parseInt(id, 10) > 0;
 }
 
 function getDate(req) {
@@ -110,7 +111,7 @@ router.post("/mark", async (req, res) => {
     });
     res.status(201).json({ message: "Marked " + status, record });
   } catch (err) {
-    if (err.code === 11000) {
+    if (isDupError(err)) {
       return res.status(409).json({ message: "Attendance already marked", duplicate: true });
     }
     console.error("Mark attendance error:", err.message);
@@ -175,7 +176,7 @@ router.post("/batch", async (req, res) => {
     }
     res.status(201).json({ message: `Marked ${inserted} records`, inserted, duplicate: records.length - docs.length });
   } catch (err) {
-    if (err.code === 11000) {
+    if (isDupError(err)) {
       return res.json({ message: "Some records were duplicates and were skipped", inserted: 0 });
     }
     console.error("Batch attendance error:", err.message);

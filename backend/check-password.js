@@ -1,4 +1,5 @@
-const mongoose = require("mongoose");
+require("dotenv").config();
+const connectDB = require("./config/db");
 const User = require("./models/User");
 
 const email = process.argv[2];
@@ -11,7 +12,7 @@ if (!email || !password) {
 }
 
 (async () => {
-  await mongoose.connect("mongodb://127.0.0.1:27017/attendance_system");
+  await connectDB();
   const user = await User.findOne({ email: email.toLowerCase() });
   if (!user) {
     console.log("User not found: " + email);
@@ -21,5 +22,5 @@ if (!email || !password) {
   console.log("Stored hash: " + String(user.password).substring(0, 40) + "...");
   const ok = await user.matchPassword(password);
   console.log("Password '" + password + "' is " + (ok ? "CORRECT ✓" : "WRONG ✗"));
-  await mongoose.disconnect();
+  process.exit(0);
 })().catch((e) => { console.error(e.message); process.exit(1); });

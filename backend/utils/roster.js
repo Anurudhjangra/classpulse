@@ -58,10 +58,7 @@ function formatRanges(ranges) {
 
 async function createRosterForSection({ owner, classId, section, ranges = DEFAULT_RANGES }) {
   const rolls = expandRanges(ranges);
-  const bulkOps = rolls.map((roll) => ({
-    insertOne: { document: { owner, classId, section, rollNumber: roll, name: "" } },
-  }));
-  await Student.collection.bulkWrite(bulkOps, { ordered: false });
+  await Student.bulkInsert({ owner, classId, section, rolls });
   return rolls.length;
 }
 
@@ -69,18 +66,12 @@ async function ensureRosterForSection({ owner, classId, section, ranges = DEFAUL
   const rolls = expandRanges(ranges);
   const existing = await Student.find({ owner, classId, section }).select("rollNumber -_id");
   const existingRolls = new Set(existing.map((s) => s.rollNumber));
-  const bulkOps = [];
-  for (const roll of rolls) {
-    if (!existingRolls.has(roll)) {
-      bulkOps.push({
-        insertOne: { document: { owner, classId, section, rollNumber: roll, name: "" } },
-      });
-    }
+  const missing = rolls.filter((roll) => !existingRolls.has(roll));
+  if (missing.length) {
+    const { inserted } = await Student.bulkInsert({ owner, classId, section, rolls: missing });
+    return inserted;
   }
-  if (bulkOps.length) {
-    await Student.collection.bulkWrite(bulkOps, { ordered: false });
-  }
-  return bulkOps.length;
+  return 0;
 }
 
 function normalizeSections(sections) {

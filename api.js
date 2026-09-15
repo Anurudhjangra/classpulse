@@ -31,8 +31,20 @@ const API = (() => {
   };
   const setGroup = (g) => localStorage.setItem(GROUP_KEY, JSON.stringify(g));
 
+  // ==========================================================
+  // IMPORTANT: Backend (server.js) ka URL yahan daalo jab
+  // Railway/online deploy ho jaye. Nahi to login/attendance fail hoga.
+  // Example:  const BACKEND_URL = "https://classpulse-production-xxxx.up.railway.app";
+  // Local pe chhodo "" — khud detect kar lega.
+  // ==========================================================
+  const BACKEND_URL = "";
+
   const API_BASE = (() => {
-    if (location.protocol === "file:") {
+    if (BACKEND_URL) return BACKEND_URL + "/api";
+    const isLocal =
+      location.protocol === "file:" ||
+      ["localhost", "127.0.0.1"].includes(location.hostname);
+    if (isLocal) {
       const port = window.API_PORT || 5000;
       return "http://localhost:" + port + "/api";
     }

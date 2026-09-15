@@ -5,24 +5,27 @@ A fast, full-stack attendance system for teachers. Mark attendance for 180 stude
 ## Tech Stack
 - **Frontend:** HTML, CSS, Vanilla JavaScript (no build step, no page reloads)
 - **Backend:** Node.js + Express
-- **Database:** MongoDB (Mongoose ODM)
+- **Database:** MySQL (mysql2)
 - **Auth:** JWT (Bearer tokens, bcrypt-hashed passwords)
 
 ---
 
 ## 🚀 Quick Start
 
-Requirements: Node.js 18+ and MongoDB running on `localhost:27017`.
+Requirements: Node.js 18+ and MySQL running on `localhost:3306`.
 
 ```bash
 # 1. Install backend dependencies
 cd backend
 npm install
 
-# 2. (Optional) Seed demo teacher + 180 students + 20 days of sample data
+# 2. Set your MySQL connection string in backend/.env
+#    MYSQL_URL=mysql://USER:PASSWORD@127.0.0.1:3306/classpulse
+
+# 3. (Optional) Seed demo teacher + 180 students + 20 days of sample data
 npm run seed
 
-# 3. Start the server (serves API + frontend on the same port)
+# 4. Start the server (serves API + frontend on the same port)
 npm start
 ```
 
@@ -46,8 +49,8 @@ You can also click **"Create account"** on the login page — a fresh roster of 
 project 2.0/
 ├── backend/
 │   ├── config/
-│   │   ├── constants.js        # MAX_ROLL = 180
-│   │   └── db.js               # MongoDB connection
+│   │   ├── constants.js        # MAX_ROLL
+│   │   └── db.js               # MySQL connection + schema auto-create
 │   ├── middleware/
 │   │   └── auth.js             # JWT verification middleware
 │   ├── models/
@@ -60,7 +63,7 @@ project 2.0/
 │   │   ├── attendance.js       # mark / today / daily / batch / delete
 │   │   └── reports.js          # student-wise report + dashboard summary
 │   ├── utils/date.js           # date helpers
-│   ├── .env                    # PORT, MONGODB_URI, JWT_SECRET
+│   ├── .env                    # PORT, MYSQL_URL, JWT_SECRET
 │   ├── seed.js                 # demo data generator
 │   ├── server.js               # Express entry point
 │   └── package.json
@@ -84,36 +87,54 @@ project 2.0/
 
 ---
 
-## 🗄 Database Schema (MongoDB collections)
+## 🗄 Database Schema (MySQL tables)
+
+*Tables are auto-created on first start (`config/db.js`).*
 
 ### `users`
 | Field | Type | Notes |
 |---|---|---|
-| `name` | String | required |
-| `email` | String | unique, lowercase |
-| `password` | String | bcrypt hash |
-| `createdAt` | Date | |
+| `id` | INT AUTO_INCREMENT PK | |
+| `name` | VARCHAR(120) | required |
+| `email` | VARCHAR(255) | unique, lowercase |
+| `password` | VARCHAR(100) | bcrypt hash |
+| `current_token` | VARCHAR(600) | single-session lock |
+| `created_at` | TIMESTAMP | |
+
+### `classes`
+| Field | Type | Notes |
+|---|---|---|
+| `id` | INT AUTO_INCREMENT PK | |
+| `owner` | INT → users | teacher |
+| `name` | VARCHAR(60) | unique per owner |
+| `sections` | TEXT (JSON array) | e.g. `["A","B"]` |
+| `roll_ranges` | TEXT (JSON object) | per-section roll ranges |
 
 ### `students`
 | Field | Type | Notes |
 |---|---|---|
-| `owner` | ObjectId → users | teacher who owns this roster |
-| `rollNumber` | Number (1–180) | unique per owner |
-| `name` | String | optional |
-| `createdAt` | Date | |
+| `id` | INT AUTO_INCREMENT PK | |
+| `owner` | INT → users | teacher who owns this roster |
+| `class_id` | INT → classes | |
+| `section` | VARCHAR(10) | |
+| `roll_number` | INT (1–180) | |
+| `name` | VARCHAR(60) | optional |
 
-*Index:* `{ owner: 1, rollNumber: 1 }` unique
+*Unique:* `(owner, class_id, section, roll_number)`
 
 ### `attendance`
 | Field | Type | Notes |
 |---|---|---|
-| `user` | ObjectId → users | teacher |
-| `rollNumber` | Number (1–180) | |
-| `date` | String `YYYY-MM-DD` | |
-| `status` | `Present` \| `Absent` | |
-| `markedAt` | Date | |
+| `id` | INT AUTO_INCREMENT PK | |
+| `user_id` | INT → users | teacher |
+| `class_id` | INT → classes | |
+| `section` | VARCHAR(10) | |
+| `roll_number` | INT (1–180) | |
+| `date` | VARCHAR(10) `YYYY-MM-DD` | |
+| `status` | VARCHAR(10) | `Present` \| `Absent` |
+| `marked_at` | TIMESTAMP | |
 
-*Index:* `{ user: 1, date: 1, rollNumber: 1 }` unique → **duplicate attendance per date is impossible** at the database level.
+*Unique:* `(user_id, class_id, section, date, roll_number)` → **duplicate attendance per date is impossible** at the database level.
 
 ---
 

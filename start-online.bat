@@ -5,10 +5,10 @@ echo  ClassPulse - Online Mode (Public Link)
 echo ============================================
 echo.
 
-:: 1. Ensure MongoDB service is running
-echo [1/3] Checking MongoDB service...
-net start MongoDB >nul 2>&1
-if errorlevel 1 ( echo  MongoDB already running or starting. ) else ( echo  MongoDB started. )
+:: 1. Ensure MySQL80 service is running
+echo [1/3] Checking MySQL80 service...
+net start MySQL80 >nul 2>&1
+if errorlevel 1 ( echo  MySQL80 already running or starting. ) else ( echo  MySQL80 started. )
 
 :: 2. Start server if not already running
 echo [2/3] Starting server on http://localhost:5000 ...

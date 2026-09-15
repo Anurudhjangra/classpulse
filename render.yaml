@@ -2,10 +2,11 @@ services:
   - type: web
     name: classpulse
     runtime: node
-    buildCommand: cd classpulse/backend && npm install
-    startCommand: node classpulse/backend/server.js
+    rootDirectory: classpulse/backend
+    buildCommand: npm install
+    startCommand: node server.js
     envVars:
-      - key: MONGODB_URI
+      - key: MYSQL_URL
         sync: false
       - key: JWT_SECRET
         generateValue: true

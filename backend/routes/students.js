@@ -10,7 +10,7 @@ const router = express.Router();
 router.use(auth);
 
 function validId(id) {
-  return /^[0-9a-fA-F]{24}$/.test(String(id || ""));
+  return /^\d+$/.test(String(id || "")) && parseInt(id, 10) > 0;
 }
 
 router.get("/", async (req, res) => {

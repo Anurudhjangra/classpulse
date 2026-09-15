@@ -1,5 +1,5 @@
 require("dotenv").config();
-const mongoose = require("mongoose");
+const connectDB = require("./config/db");
 const User = require("./models/User");
 const Class = require("./models/Class");
 const Student = require("./models/Student");
@@ -26,10 +26,8 @@ async function resetDemoData(user) {
 }
 
 async function seed() {
-  await mongoose.connect(process.env.MONGODB_URI, { serverSelectionTimeoutMS: 10000 });
-  console.log("Connected to MongoDB");
-
-  await Promise.all([Class.syncIndexes(), Student.syncIndexes(), Attendance.syncIndexes()]);
+  await connectDB();
+  console.log("Connected to MySQL");
 
   let user = await User.findOne({ email: DEMO_EMAIL });
   if (!user) {
@@ -92,7 +90,7 @@ async function seed() {
 
   console.log(`Seeded ${inserted} attendance records across ${groups.length} groups × ${dates.length} days`);
   console.log("Done. Login with:", DEMO_EMAIL, "/", DEMO_PASSWORD);
-  await mongoose.disconnect();
+  process.exit(0);
 }
 
 seed().catch((err) => {

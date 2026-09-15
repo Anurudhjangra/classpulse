@@ -1,5 +1,4 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const Attendance = require("../models/Attendance");
 const Student = require("../models/Student");
 const auth = require("../middleware/auth");
@@ -10,7 +9,7 @@ const router = express.Router();
 router.use(auth);
 
 function validId(id) {
-  return /^[0-9a-fA-F]{24}$/.test(String(id || ""));
+  return /^\d+$/.test(String(id || "")) && parseInt(id, 10) > 0;
 }
 
 function buildDateFilter(query) {
@@ -38,7 +37,7 @@ router.get("/student-wise", async (req, res) => {
       if (!validId(req.query.classId) || !req.query.section) {
         return res.status(400).json({ message: "Invalid classId/section" });
       }
-      match.classId = new mongoose.Types.ObjectId(req.query.classId);
+      match.classId = parseInt(req.query.classId, 10);
       match.section = String(req.query.section).toUpperCase();
     }
 

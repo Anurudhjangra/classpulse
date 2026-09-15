@@ -5,13 +5,14 @@ const Attendance = require("../models/Attendance");
 const auth = require("../middleware/auth");
 const { createRosterForSection, normalizeSections, parseRangesInput, totalFromRanges, formatRanges, DEFAULT_RANGES } = require("../utils/roster");
 const { todayStr } = require("../utils/date");
+const { isDupError } = require("../config/db");
 
 const router = express.Router();
 
 router.use(auth);
 
 function validId(id) {
-  return /^[0-9a-fA-F]{24}$/.test(String(id || ""));
+  return /^\d+$/.test(String(id || "")) && parseInt(id, 10) > 0;
 }
 
 async function buildGroups(user) {
@@ -116,7 +117,7 @@ router.post("/", async (req, res) => {
       class: cls,
     });
   } catch (err) {
-    if (err.code === 11000) {
+    if (isDupError(err)) {
       return res.status(409).json({ message: "A class with this name already exists" });
     }
     console.error("Create class error:", err.message);
@@ -189,7 +190,7 @@ router.put("/:id", async (req, res) => {
       added,
     });
   } catch (err) {
-    if (err.code === 11000) {
+    if (isDupError(err)) {
       return res.status(409).json({ message: "A class with this name already exists" });
     }
     console.error("Update class error:", err.message);
